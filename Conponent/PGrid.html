@@ -1,0 +1,20 @@
+<PGdragHandler *ngIf="ShowResizer" [Grips]="PGHGrips" [GridID]="Options.GridID" [GridWidth]="OffsetWidth" [GridHeight]="OffsetHeight"
+    (SyncHandlers)="onSyncHandlers($event)" (PGDragend)="onDragend($event)" (PGMousedown)="onMousedown($event)" (PGDragstart)="onDragstart($event)"
+    (PGMouseup)="onMouseup($event)">
+</PGdragHandler>
+<table [id]="Options.GridID" cellpadding="10" cellspacing="10" border="1px" class="JColResizer" [width]="Options.GridWidth">
+    <thead>
+        <tr>
+            <td *ngFor="let col of GridColums; let conindex = index;" [id]="Options.GridID+'_'+col.ColumnName">
+                {{col.HeaderName}}
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of Rows; let rowindex = index;">
+            <td *ngFor="let col of GridColums;let conindex = index;">
+                {{row[col.ColumnName]}}
+            </td>
+        </tr>
+    </tbody>
+</table>
