@@ -1,20 +1,27 @@
 <PGdragHandler *ngIf="ShowResizer" [Grips]="PGHGrips" [GridID]="Options.GridID" [GridWidth]="OffsetWidth" [GridHeight]="OffsetHeight"
     (SyncHandlers)="onSyncHandlers($event)" (PGDragend)="onDragend($event)" (PGMousedown)="onMousedown($event)" (PGDragstart)="onDragstart($event)"
     (PGMouseup)="onMouseup($event)">
-</PGdragHandler>
-<table [id]="Options.GridID" cellpadding="10" cellspacing="10" border="1px" class="JColResizer" [width]="Options.GridWidth">
-    <thead>
-        <tr>
-            <td *ngFor="let col of GridColums; let conindex = index;" [id]="Options.GridID+'_'+col.ColumnName">
-                {{col.HeaderName}}
-            </td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let row of Rows; let rowindex = index;">
-            <td *ngFor="let col of GridColums;let conindex = index;">
-                {{row[col.ColumnName]}}
-            </td>
-        </tr>
-    </tbody>
-</table>
+    </PGdragHandler>
+    <table [id]="Options.GridID" class="JColResizer table table-bordered" [width]="Options.GridWidth">
+        <thead>
+            <tr>
+                <td width="30"></td>
+                <td *ngFor="let col of GridColums; let conindex = index;" [id]="Options.GridID+'_'+col.ColumnName">
+                    {{col.HeaderName}}
+                </td>
+                <td width="35px"></td>
+                <td width="35px"></td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of Rows; let rowindex = index;">
+                <td style="text-align: center;"><input type="checkbox"></td>
+                <td *ngFor="let col of GridColums;let conindex = index;">
+                    {{row[col.ColumnName]}}
+                </td>
+                <td style="text-align: center;"><button><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                <td style="text-align: center;"><button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+
+            </tr>
+        </tbody>
+    </table>
