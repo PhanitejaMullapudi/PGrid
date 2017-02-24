@@ -1,0 +1,7 @@
+<div class="JCLRgrips" [style.width.px]="GridWidth">
+    <div [id]="'RH'+GridID + '_' + col.ColumnName" [class]=" i != Grips.length-1?'JCLRgrip':'JCLRgrip JCLRLastGrip'" [style.height.px]="GridHeight"
+        [style.left.px]="col.OffsetLeft" *ngFor="let col of Grips; let i = index;" draggable="true" (mousedown)="onMousedown($event, col,i)"
+        (dragend)="onDragend($event, col,i)" (dragstart)="onDragstart($event, col,i)" (mouseup)="onMouseup($event, col,i)">
+        <div *ngIf="i != Grips.length-1 " class="JColResizer"></div>
+    </div>
+</div>
