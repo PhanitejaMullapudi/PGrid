@@ -45,25 +45,45 @@ export class PGridComponent implements AfterViewInit {
     private startX: number;
     private endX: number;
     private DragedGrip: any;
+    private TotalCols: number;
 
     setIntWidths() {
         this.OffsetWidth = this.Table.offsetWidth;
         this.OffsetHeight = this.Table.offsetHeight;
-        let tempdom = this.domElement;
         this.ShowResizer = this.Options.isResizable;
+        let col = (this.Options.ShowSelection && this.Options.ShowComandButtons) ? 3 : (this.Options.ShowComandButtons) ? 2 : this.Options.ShowSelection ? 1 : 0;
+        this.TotalCols = this.GridColums.length + col;
         this.cdRef.detectChanges();
     }
 
     onSyncHandlers() {
         let left: number = 0;
+        let ExtraSpaceleft = 0;
+        if (this.Options.ShowSelection) {
+            ExtraSpaceleft = 30;
+        }
+        let i: number = 0;
+        let ScrolSyncCol;
         this.PGHGrips.forEach(grip => {
 
             let column = this.domElement.nativeElement.querySelector('#' + this.Options.GridID + '_' + grip.ColumnName);
             let table = this.domElement.nativeElement.querySelector('#' + this.Options.GridID);
 
+            if (this.Options.isScrollable)
+                ScrolSyncCol = this.domElement.nativeElement.querySelector('#' + this.Options.GridID + '_0_' + grip.ColumnName);
+
             let cellSpacing: number = isNaN(parseInt(table.cellSpacing)) ? 0 : parseInt(table.cellSpacing);
             left = left + column.offsetWidth + cellSpacing;
+
+            if (this.Options.isScrollable) {
+                ScrolSyncCol.width = window.getComputedStyle(column).width
+            }
+
+            if (i == 0)
+                left = left + ExtraSpaceleft;
+
             grip.OffsetLeft = left;
+            i += 1;
         });
     }
 
