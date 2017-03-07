@@ -41,7 +41,7 @@
 }
 
 .JCLRgripDrag {
-    border-left: 1px dotted black;
+    border-left: 1px dotted red !important;
 }
 
 .JCLRFlex {
@@ -52,3 +52,26 @@
     cursor: default;
     display: none;
 }
+.NoRecordsClass
+{
+    text-align: center;    
+}
+.ScrollDiv
+{
+    overflow-y:auto; 
+    overflow-x: hidden; 
+    margin-right:-15px; 
+}
+
+.ScrollTabel
+{
+    margin-bottom: 0px !important;
+}
+
+/*thead, tbody { display: block; }
+
+tbody {
+    height: 100px;       
+    overflow-y: auto;    
+    overflow-x: hidden;  
+}*/

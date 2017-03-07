@@ -3,8 +3,8 @@ import { PGHGrip } from './PGHGrips'
 
 @Component({
     selector: 'PGdragHandler',
-    templateUrl: `app/CustomGrid/PGdragHandler.html`,
-    styleUrls: ['app/CustomGrid/PGrid.css'],
+    templateUrl: `./PGdragHandler.html`,
+    styleUrls: ['PGrid.css'],
 })
 export class PGDragHandlerComponent implements AfterViewInit {
     domElement: ElementRef
@@ -49,8 +49,6 @@ export class PGDragHandlerComponent implements AfterViewInit {
         this.SyncHandlers.emit();
         this.cdRef.detectChanges();
     }
-
-
     onMousedown(event: any, col: PGHGrip, index: number) {
         this.PGMousedown.emit({ event: event, Column: col, index: index });
     }
@@ -62,7 +60,7 @@ export class PGDragHandlerComponent implements AfterViewInit {
     onDragend(event: any, col: PGHGrip, index: number) {
         this.PGDragend.emit({ event: event, Column: col, index: index });
     }
-    
+
     onMouseup(event: any, col: PGHGrip, index: number) {
         this.PGMouseup.emit({ event: event, Column: col, index: index });
     }

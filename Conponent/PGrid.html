@@ -1,20 +1,77 @@
-<PGdragHandler *ngIf="ShowResizer" [Grips]="PGHGrips" [GridID]="Options.GridID" [GridWidth]="OffsetWidth" [GridHeight]="OffsetHeight"
-    (SyncHandlers)="onSyncHandlers($event)" (PGDragend)="onDragend($event)" (PGMousedown)="onMousedown($event)" (PGDragstart)="onDragstart($event)"
-    (PGMouseup)="onMouseup($event)">
-</PGdragHandler>
-<table [id]="Options.GridID" cellpadding="10" cellspacing="10" border="1px" class="JColResizer" [width]="Options.GridWidth">
-    <thead>
-        <tr>
-            <td *ngFor="let col of GridColums; let conindex = index;" [id]="Options.GridID+'_'+col.ColumnName">
-                {{col.HeaderName}}
-            </td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let row of Rows; let rowindex = index;">
-            <td *ngFor="let col of GridColums;let conindex = index;">
-                {{row[col.ColumnName]}}
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div *ngIf="!Options.isScrollable">
+    <PGdragHandler *ngIf="ShowResizer" [Grips]="PGHGrips" [GridID]="Options.GridID" [GridWidth]="OffsetWidth" [GridHeight]="OffsetHeight"
+        (SyncHandlers)="onSyncHandlers($event)" (PGDragend)="onDragend($event)" (PGMousedown)="onMousedown($event)" (PGDragstart)="onDragstart($event)"
+        (PGMouseup)="onMouseup($event)">
+        </PGdragHandler>
+        <table [id]="Options.GridID" class="JColResizer table table-bordered" [width]="Options.GridWidth">
+            <thead>
+                <tr>
+                    <td *ngIf="Options.ShowSelection" width="30"></td>
+                    <td *ngFor="let col of GridColums; let conindex = index;" [id]="Options.GridID+'_'+col.ColumnName">
+                        {{col.HeaderName}}
+                    </td>
+                    <td width="35px" *ngIf="Options.ShowSelection"></td>
+                    <td width="35px" *ngIf="Options.ShowSelection"></td>
+                </tr>
+            </thead>
+            <tbody *ngIf="Rows.length>0">
+
+                <tr *ngFor="let row of Rows; let rowindex = index;">
+                    <td style="text-align: center;" *ngIf="Options.ShowSelection"><input type="checkbox"></td>
+                    <td *ngFor="let col of GridColums;let conindex = index;">
+                        {{row[col.ColumnName]}}
+                    </td>
+                    <td style="text-align: center;" *ngIf="Options.ShowSelection"><button><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                    <td style="text-align: center;" *ngIf="Options.ShowSelection"><button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+
+                </tr>
+            </tbody>
+            <tbody *ngIf="Rows.length==0">
+                <tr>
+                    <td [colSpan]="TotalCols" class="NoRecordsClass">
+                        {{Options.NoRecordsLable}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</div>
+<div *ngIf="Options.isScrollable">
+    <PGdragHandler *ngIf="ShowResizer" [Grips]="PGHGrips" [GridID]="Options.GridID" [GridWidth]="OffsetWidth" [GridHeight]="OffsetHeight"
+        (SyncHandlers)="onSyncHandlers($event)" (PGDragend)="onDragend($event)" (PGMousedown)="onMousedown($event)" (PGDragstart)="onDragstart($event)"
+        (PGMouseup)="onMouseup($event)">
+        </PGdragHandler>
+        <table [id]="Options.GridID" class="JColResizer table table-bordered ScrollTabel" [width]="Options.GridWidth">
+            <thead>
+                <tr>
+                    <td *ngIf="Options.ShowSelection" width="30"></td>
+                    <td *ngFor="let col of GridColums; let conindex = index;" [id]="Options.GridID+'_'+col.ColumnName">
+                        {{col.HeaderName}}
+                    </td>
+                    <td width="35px" *ngIf="Options.ShowComandButtons"></td>
+                    <td width="35px" *ngIf="Options.ShowComandButtons"></td>
+                </tr>
+            </thead>
+        </table>
+</div>
+<div *ngIf="Options.isScrollable" class="ScrollDiv" [style.height]="Options.ScrollAreaHeight">
+    <table [id]="Options.GridID" class="JColResizer table table-bordered" [width]="Options.GridWidth">
+        <tbody *ngIf="Rows.length>0">
+            <tr *ngFor="let row of Rows; let rowindex = index;">
+                <td style="text-align: center;" *ngIf="Options.ShowSelection" width="30"><input type="checkbox"></td>
+                <td *ngFor="let col of GridColums;let conindex = index;" [id]="Options.GridID+'_'+rowindex+'_'+col.ColumnName">
+                    {{row[col.ColumnName]}}
+                </td>
+                <td style="text-align: center;" width="35px" *ngIf="Options.ShowComandButtons"><button><i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                <td style="text-align: center;" width="35px" *ngIf="Options.ShowComandButtons"><button><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></td>
+
+            </tr>
+        </tbody>
+        <tbody *ngIf="Rows.length==0">
+            <tr>
+                <td [colSpan]="TotalCols" class="NoRecordsClass">
+                    {{Options.NoRecordsLable}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
