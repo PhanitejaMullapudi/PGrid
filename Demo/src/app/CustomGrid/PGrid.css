@@ -67,6 +67,9 @@
 {
     margin-bottom: 0px !important;
 }
+.SelectedBackground{
+    background-color: red;
+}
 
 /*thead, tbody { display: block; }
 

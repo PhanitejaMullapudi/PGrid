@@ -1,29 +1,32 @@
-import { Component, Input, AfterViewInit, ElementRef, ChangeDetectorRef, Renderer } from '@angular/core';
-
+import { Component, Input, AfterViewInit, ElementRef, ChangeDetectorRef, Renderer, OnChanges } from '@angular/core';
 import { PGridOptions } from './PGridOptions';
 import { PGridColumn } from './PGridColumn';
 import { PGHGrip } from './PGHGrips'
 import { CommonModule } from '@angular/common';
-
+import 'rxjs/Rx';
 
 @Component({
     selector: 'PGrid',
     templateUrl: `./PGrid.html`,
     styleUrls: ['./PGrid.css'],
 })
-export class PGridComponent implements AfterViewInit {
+export class PGridComponent implements AfterViewInit, OnChanges {
     domElement: ElementRef;
     PGHGrips: Array<PGHGrip> = [];
 
     @Input()
     Options: PGridOptions;
+    //Options: PGridOptions;
 
     @Input()
     GridColums: Array<PGridColumn>;
 
     @Input()
     Rows: Array<any>;
+    //Rows: Array<any>;
     Table: any;
+
+    selectedRows: Array<any> = [];
 
     constructor(private el: ElementRef, private cdRef: ChangeDetectorRef, public renderer: Renderer) {
         this.domElement = el;
@@ -37,6 +40,12 @@ export class PGridComponent implements AfterViewInit {
         this.setIntWidths();
     }
 
+    ngOnChanges(changes) {
+        this.SetData({
+            Rows: changes.Rows.currentValue,
+            Options: changes.Options.currentValue
+        });
+    }
 
 
     private ShowResizer: boolean;
@@ -54,6 +63,26 @@ export class PGridComponent implements AfterViewInit {
         let col = (this.Options.ShowSelection && this.Options.ShowComandButtons) ? 3 : (this.Options.ShowComandButtons) ? 2 : this.Options.ShowSelection ? 1 : 0;
         this.TotalCols = this.GridColums.length + col;
         this.cdRef.detectChanges();
+    }
+
+    SetData({ Rows, Options }) {
+        //let selectedRows = this.selectedRows;
+        let isExists: boolean;
+        if (Rows) {
+            this.Rows = Rows;
+            this.Rows.map(a => {
+                Object.assign(
+                    a, {
+                        isSelected: this.selectedRows.indexOf(a) == -1 ? false : true,
+                        rowID: uuid(),
+                        SelectedCss: this.GetSelectionClass(a)
+                    });
+            });
+        }
+
+        if (Options)
+            this.Options = Options;
+
     }
 
     onSyncHandlers() {
@@ -87,7 +116,30 @@ export class PGridComponent implements AfterViewInit {
         });
     }
 
+    addOrRemovefromSelectedRows(Obj: any) {
+        if (!Obj.isSelected) {
+            if (this.selectedRows) {
+                this.selectedRows.push(Obj);
+            }
+            else {
+                this.selectedRows = [Obj];
+            }
+        }
+        else {
+            if (this.selectedRows) {
+                let index = this.selectedRows.indexOf(Obj);
+                this.selectedRows.splice(index, 1);
+            }
+        }
+        console.log(Obj);
+        console.log(this.selectedRows);
+    }
+    onSelectionClick(Obj: any) {
 
+        this.addOrRemovefromSelectedRows(Obj);
+        Obj.isSelected = !Obj.isSelected;
+        Obj.SelectedCss = this.GetSelectionClass(Obj);
+    }
     onMousedown(Obj: any) {
         this.DragedGrip = this.domElement.nativeElement.querySelector('#RH' + this.Options.GridID + '_' + Obj.Column.ColumnName);
         this.DragedGrip.className += ' JCLRgripDrag';
@@ -126,6 +178,17 @@ export class PGridComponent implements AfterViewInit {
         this.onSyncHandlers();
     }
 
+    GetSelectionClass(row: any) {
+        if (row) {
+            if (row.isSelected) {
+                return this.Options.DefaultRowSelectionClass;
+            }
+            else
+                return '';
+        }
+
+    }
+
     onDragstart(Obj: any) {
         this.startX = Obj.event.clientX;
     }
@@ -155,6 +218,9 @@ export class PGridComponent implements AfterViewInit {
         return this.domElement.nativeElement.querySelector('#' + this.Options.GridID + '_' + this.PGHGrips[index].ColumnName);
     }
 
+}
+function uuid() {
+    return Math.floor(Math.random() * 10000000000000);
 }
 
 export * from './PGridOptions';
